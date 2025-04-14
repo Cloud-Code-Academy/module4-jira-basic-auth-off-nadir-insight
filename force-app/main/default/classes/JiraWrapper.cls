@@ -2,7 +2,7 @@
  * Wrapper classes for Jira entities (Project and Issue)
  */
 public class JiraWrapper {
-	private static final String LEAD_ACCOUNT_ID = '1337:0123456789-bfa0-40f4-bd28-25ae65c3e5b1';
+	private static final String LEAD_ACCOUNT_ID = '640fb1499796ea0a871624e9';
 	private static final String PROJECT_TEMPLATE_KEY = 'com.pyxis.greenhopper.jira:basic-software-development-template';
 
 	/**

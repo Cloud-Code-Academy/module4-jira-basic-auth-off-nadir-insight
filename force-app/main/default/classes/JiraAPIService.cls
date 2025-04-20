@@ -12,7 +12,23 @@ public with sharing class JiraAPIService {
 	 */
 	public static String createProject(JiraWrapper.ProjectWrapper projectWrapper) {
 		// Your implementation goes here
-		return null;
+
+        String endpoint = 'callout:jira/project';
+
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint(endpoint);        
+        request.setMethod('POST');
+        request.setHeader('Accept', 'application/json');
+        request.setHeader('Content-Type', 'application/json');
+        request.setBody(JSON.serialize(projectWrapper));
+
+        Http http = new Http();
+        HttpResponse response = http.send(request);
+
+        Map<String, Object> jsonBodyMap = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+        Integer projectId = (Integer) jsonBodyMap.get('id');
+
+		return String.valueOf(projectId);
 	}
 
 	/**
@@ -25,6 +41,21 @@ public with sharing class JiraAPIService {
 	 */
 	public static String createIssue(JiraWrapper.IssueWrapper issueWrapper) {
 		// Your implementation goes here
-		return null;
+
+        String endpoint = 'callout:jira/issue';
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint(endpoint);        
+        request.setMethod('POST');
+        request.setHeader('Accept', 'application/json');
+        request.setHeader('Content-Type', 'application/json');
+        request.setBody(JSON.serialize(issueWrapper));
+
+        Http http = new Http();
+        HttpResponse response = http.send(request);
+
+        Map<String, Object> jsonBodyMap = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+        String issueKey = (String) jsonBodyMap.get('key');
+
+		return issueKey;
 	}
 }

@@ -2,7 +2,7 @@
  * Wrapper classes for Jira entities (Project and Issue)
  */
 public class JiraWrapper {
-	private static final String LEAD_ACCOUNT_ID = '1337:0123456789-bfa0-40f4-bd28-25ae65c3e5b1';
+	private static final String LEAD_ACCOUNT_ID = '640fb1499796ea0a871624e9';
 	private static final String PROJECT_TEMPLATE_KEY = 'com.pyxis.greenhopper.jira:basic-software-development-template';
 
 	/**
@@ -58,15 +58,23 @@ public class JiraWrapper {
 		 *
 		 * TODO: Implement this method to create a Map that represents
 		 * the JSON payload needed for the Jira API. The Map should contain:
-		 * - fields object with project information (key)
-		 * - issuetype object with the issue type name
-		 * - summary field
-		 * - description field (formatted using formatDescription method)
+		 * - [x] fields object with project information (key)
+		 * - [x] issuetype object with the issue type name
+		 * - [x] summary field
+		 * - [x] description field (formatted using formatDescription method)
 		 * - Example:
 		 */
 		public Map<String, Object> generateIssuePayloadMap() {
 			// Your implementation goes here
-			return null;
+            Map<String, Object> fieldsMap = new Map<String, Object>();
+            fieldsMap.put('project', new Map<String, Object>{'id' => this.projectKey});
+            fieldsMap.put('issuetype', new Map<String, Object>{'id' => this.issueType});
+            fieldsMap.put('summary', this.summary);
+            fieldsMap.put('description', formatDescription(this.description));
+            Map<String, Object> jsonPayload = new Map<String, Object>{
+                'fields' => fieldsMap
+            };
+			return jsonPayload;
 		}
 
 		/**
@@ -97,8 +105,25 @@ public class JiraWrapper {
 		 *   }
 		 */
 		private Map<String, Object> formatDescription(String descText) {
-			// Your implementation goes here
-			return null;
+			List<Object> textContentList = new List<Object>();
+            Map<String, Object> textContent = new Map<String, Object> {
+                'type' => 'text',
+                'text' => descText
+            };
+            textContentList.add(textContent);
+            Map<String, Object> paragraphContent = new Map<String, Object> {
+                'type' => 'paragraph',
+                'content' => textContentList
+            };
+            Map<String, Object> descriptionMap = new Map<String, Object>();
+            descriptionMap.put('type', 'doc');
+            descriptionMap.put('version', 1);
+			descriptionMap.put('content', paragraphContent);
+            Map<String, Object> description = new Map<String, Object>{
+                'description' => descriptionMap
+            };
+
+            return description;
 		}
 	}
 }

@@ -11,7 +11,7 @@ public with sharing class JiraAPIService {
 	 * Reminder: Extract and return the project ID from the response
 	 */
 	public static String createProject(JiraWrapper.ProjectWrapper projectWrapper) {
-		// Your implementation goes here 
+		// Your implementation goes here
 
         String endpoint = 'callout:jira/project';
 

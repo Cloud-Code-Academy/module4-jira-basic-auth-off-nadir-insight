@@ -45,5 +45,28 @@ public with sharing class JiraTriggerHelper {
 	 */
 	public static void processIssueAfterInsert(List<Jira_Issue__c> newIssues) {
 		// Your implementation goes here
+        List<Jira_Issue__c> issuesToProcess = new List<Jira_Issue__c>();
+
+        for (Jira_Issue__c newIssue : newIssues) {
+            if (!String.isBlank(newIssue.Issue_Key__c) && !String.isBlank(newIssue.Project_Key__c)) {
+                issuesToProcess.add(newIssue);
+            }
+        }
+
+        if (!issuesToProcess.IsEmpty()) {
+            for (Jira_Issue__c issue : issuesToProcess) {
+                JiraCalloutQueueable callout = new JiraCalloutQueueable(
+                    issue.Id,
+                    issue.Project_Key__c,
+                    issue.Summary__c,
+                    issue.Description__c,
+                    issue.Issue_Type__c
+                );
+    
+                if (!Test.isRunningTest()) {
+                    System.enqueueJob(callout);
+                }
+            }
+        }
 	}
 }
